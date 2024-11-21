@@ -86,7 +86,12 @@ class HapticsPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
 
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol Haptics {
-  func isSupported() throws -> Bool
+  func supportsHaptics() throws -> Bool
+  func initHaptics() throws
+  func loadPattern(data: String) throws
+  func start() throws
+  func stop() throws
+  func setPlaybackRate(value: Double) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -95,18 +100,87 @@ class HapticsSetup {
   /// Sets up an instance of `Haptics` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: Haptics?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let isSupportedChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.haptics.Haptics.isSupported\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let supportsHapticsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.haptics.Haptics.supportsHaptics\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      isSupportedChannel.setMessageHandler { _, reply in
+      supportsHapticsChannel.setMessageHandler { _, reply in
         do {
-          let result = try api.isSupported()
+          let result = try api.supportsHaptics()
           reply(wrapResult(result))
         } catch {
           reply(wrapError(error))
         }
       }
     } else {
-      isSupportedChannel.setMessageHandler(nil)
+      supportsHapticsChannel.setMessageHandler(nil)
+    }
+    let initHapticsChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.haptics.Haptics.initHaptics\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      initHapticsChannel.setMessageHandler { _, reply in
+        do {
+          try api.initHaptics()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      initHapticsChannel.setMessageHandler(nil)
+    }
+    let loadPatternChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.haptics.Haptics.loadPattern\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      loadPatternChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let dataArg = args[0] as! String
+        do {
+          try api.loadPattern(data: dataArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      loadPatternChannel.setMessageHandler(nil)
+    }
+    let startChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.haptics.Haptics.start\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      startChannel.setMessageHandler { _, reply in
+        do {
+          try api.start()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      startChannel.setMessageHandler(nil)
+    }
+    let stopChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.haptics.Haptics.stop\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      stopChannel.setMessageHandler { _, reply in
+        do {
+          try api.stop()
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      stopChannel.setMessageHandler(nil)
+    }
+    let setPlaybackRateChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.haptics.Haptics.setPlaybackRate\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setPlaybackRateChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let valueArg = args[0] as! Double
+        do {
+          try api.setPlaybackRate(value: valueArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setPlaybackRateChannel.setMessageHandler(nil)
     }
   }
 }

@@ -10,7 +10,17 @@ import 'package:pigeon/pigeon.dart';
 ))
 @HostApi()
 abstract class Haptics {
-  bool isSupported();
+  bool supportsHaptics();
+
+  void initHaptics();
+
+  void loadPattern(String data);
+
+  void start();
+
+  void stop();
+
+  void setPlaybackRate(double value);
 }
 
 // dart run pigeon --input pigeons/haptics.dart --dart_out lib/haptics.dart
