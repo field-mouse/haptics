@@ -13,6 +13,7 @@ class HapticsImpl: Haptics {
     private var player: CHHapticAdvancedPatternPlayer?
     
     private var playbackRate: Float = 1.0
+    private var loopEnabled: Bool = false
     
     func supportsHaptics() throws -> Bool {
         let hapticCapability = CHHapticEngine.capabilitiesForHardware()
@@ -28,6 +29,7 @@ class HapticsImpl: Haptics {
         player = try engine?.makeAdvancedPlayer(with: pattern)
         player?.loopEnabled = true
         player?.playbackRate = playbackRate
+        player?.loopEnabled = loopEnabled
         try engine?.start()
     }
     
@@ -42,6 +44,11 @@ class HapticsImpl: Haptics {
     func setPlaybackRate(value: Double) throws {
         playbackRate = Float(value)
         player?.playbackRate = playbackRate
+    }
+    
+    func setLoopEnabled(value: Bool) throws {
+        loopEnabled = value
+        player?.loopEnabled = value
     }
     
     private func preparePattern(data: String) throws -> CHHapticPattern {

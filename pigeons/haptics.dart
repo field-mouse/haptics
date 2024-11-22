@@ -21,6 +21,8 @@ abstract class Haptics {
   void stop();
 
   void setPlaybackRate(double value);
+
+  void setLoopEnabled(bool value);
 }
 
 // dart run pigeon --input pigeons/haptics.dart --dart_out lib/haptics.dart

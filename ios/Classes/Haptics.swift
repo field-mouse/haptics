@@ -92,6 +92,7 @@ protocol Haptics {
   func start() throws
   func stop() throws
   func setPlaybackRate(value: Double) throws
+  func setLoopEnabled(value: Bool) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -181,6 +182,21 @@ class HapticsSetup {
       }
     } else {
       setPlaybackRateChannel.setMessageHandler(nil)
+    }
+    let setLoopEnabledChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.haptics.Haptics.setLoopEnabled\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    if let api = api {
+      setLoopEnabledChannel.setMessageHandler { message, reply in
+        let args = message as! [Any?]
+        let valueArg = args[0] as! Bool
+        do {
+          try api.setLoopEnabled(value: valueArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
+        }
+      }
+    } else {
+      setLoopEnabledChannel.setMessageHandler(nil)
     }
   }
 }

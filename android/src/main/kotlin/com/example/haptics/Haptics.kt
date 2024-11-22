@@ -59,6 +59,7 @@ interface Haptics {
   fun start()
   fun stop()
   fun setPlaybackRate(value: Double)
+  fun setLoopEnabled(value: Boolean)
 
   companion object {
     /** The codec used by Haptics. */
@@ -158,6 +159,24 @@ interface Haptics {
             val valueArg = args[0] as Double
             val wrapped: List<Any?> = try {
               api.setPlaybackRate(valueArg)
+              listOf(null)
+            } catch (exception: Throwable) {
+              wrapError(exception)
+            }
+            reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.haptics.Haptics.setLoopEnabled$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val valueArg = args[0] as Boolean
+            val wrapped: List<Any?> = try {
+              api.setLoopEnabled(valueArg)
               listOf(null)
             } catch (exception: Throwable) {
               wrapError(exception)
